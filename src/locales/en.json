@@ -1,0 +1,71 @@
+{
+  "cli": {
+    "help": {
+      "usage": "Usage: ccr [command] [options]",
+      "description": "Claude Code Router CLI - Replace Claude Code's default AI provider with custom LLM providers",
+      "commands": {
+        "title": "Commands:",
+        "start": "  start      Start the claude code router service",
+        "stop": "  stop       Stop the claude code router service",
+        "status": "  status     Show service status",
+        "restart": "  restart    Restart the service",
+        "proxy": "  proxy      Manage LLM providers (add/list/delete)",
+        "default": "  (default)  Show service status and start if not running"
+      },
+      "options": {
+        "title": "Options:",
+        "version": "  --version  Show version number",
+        "help": "  --help     Show this help message"
+      }
+    },
+    "messages": {
+      "stopSuccess": "claude code router service has been successfully stopped.",
+      "stopFailed": "Failed to stop the service. It may have already been stopped.",
+      "serviceNotRunning": "Service not running, starting service...",
+      "startFailed": "Failed to start service:",
+      "startupTimeout": "Service startup timeout, please manually run `ccr start` to start the service or check if there's an error"
+    }
+  },
+  "status": {
+    "title": "📊 Claude Code Router Status",
+    "running": {
+      "status": "✅ Status: Running",
+      "pid": "🆔 Process ID:",
+      "port": "🌐 Port:",
+      "endpoint": "📡 API Endpoint:",
+      "pidFile": "📄 PID File:",
+      "ready": "🚀 Ready to use! Run the following commands:",
+      "claudeCommand": "Run claude commands with custom providers"
+    },
+    "notRunning": {
+      "status": "❌ Status: Not Running",
+      "hint": "💡 To start the service:"
+    }
+  },
+  "codeCommand": {
+    "errors": {
+      "failedToStart": "Failed to start claude command:",
+      "installHint": "Make sure Claude Code is installed: npm install -g @anthropic-ai/claude-code"
+    }
+  },
+  "service": {
+    "alreadyRunning": "✅ Service is already running in the background.",
+    "apiKeyWarning": "⚠️ API key is not set. HOST is forced to 127.0.0.1.",
+    "sigintReceived": "Received SIGINT, cleaning up..."
+  },
+  "prompts": {
+    "providerName": "Enter Provider Name: ",
+    "apiKey": "Enter Provider API KEY: ",
+    "url": "Enter Provider URL: ",
+    "modelName": "Enter MODEL Name: "
+  },
+  "close": {
+    "noService": "No service is currently running.",
+    "success": "claude code router service has been successfully stopped.",
+    "failed": "Failed to stop the service. It may have already been stopped."
+  },
+  "auth": {
+    "missingApiKey": "APIKEY is missing",
+    "invalidApiKey": "Invalid API key"
+  }
+}

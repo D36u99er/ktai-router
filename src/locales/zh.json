@@ -1,0 +1,71 @@
+{
+  "cli": {
+    "help": {
+      "usage": "用法：ccr [命令] [选项]",
+      "description": "Claude Code Router CLI - 使用自定义 LLM 提供商替换 Claude Code 的默认 AI 提供商",
+      "commands": {
+        "title": "命令：",
+        "start": "  start      启动 claude code router 服务",
+        "stop": "  stop       停止 claude code router 服务",
+        "status": "  status     显示服务状态",
+        "restart": "  restart    重启服务",
+        "proxy": "  proxy      管理 LLM 提供商（添加/列表/删除）",
+        "default": "  (默认)     显示服务状态，如未运行则启动"
+      },
+      "options": {
+        "title": "选项：",
+        "version": "  --version  显示版本号",
+        "help": "  --help     显示此帮助信息"
+      }
+    },
+    "messages": {
+      "stopSuccess": "claude code router 服务已成功停止。",
+      "stopFailed": "停止服务失败。服务可能已经停止。",
+      "serviceNotRunning": "服务未运行，正在启动服务...",
+      "startFailed": "启动服务失败：",
+      "startupTimeout": "服务启动超时，请手动运行 `ccr start` 启动服务或检查是否有错误"
+    }
+  },
+  "status": {
+    "title": "📊 Claude Code Router 状态",
+    "running": {
+      "status": "✅ 状态：运行中",
+      "pid": "🆔 进程ID：",
+      "port": "🌐 端口：",
+      "endpoint": "📡 API端点：",
+      "pidFile": "📄 PID文件：",
+      "ready": "🚀 准备就绪！运行以下命令：",
+      "claudeCommand": "使用自定义提供商运行 claude 命令"
+    },
+    "notRunning": {
+      "status": "❌ 状态：未运行",
+      "hint": "💡 启动服务："
+    }
+  },
+  "codeCommand": {
+    "errors": {
+      "failedToStart": "启动 claude 命令失败：",
+      "installHint": "请确保已安装 Claude Code：npm install -g @anthropic-ai/claude-code"
+    }
+  },
+  "service": {
+    "alreadyRunning": "✅ 服务已在后台运行。",
+    "apiKeyWarning": "⚠️ API密钥未设置。HOST 强制为 127.0.0.1。",
+    "sigintReceived": "收到 SIGINT，正在清理..."
+  },
+  "prompts": {
+    "providerName": "输入提供商名称：",
+    "apiKey": "输入提供商 API KEY：",
+    "url": "输入提供商 URL：",
+    "modelName": "输入模型名称："
+  },
+  "close": {
+    "noService": "当前没有运行的服务。",
+    "success": "claude code router 服务已成功停止。",
+    "failed": "停止服务失败。服务可能已经停止。"
+  },
+  "auth": {
+    "missingApiKey": "缺少 API 密钥",
+    "invalidApiKey": "无效的 API 密钥"
+  }
+}

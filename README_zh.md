@@ -1,4 +1,5 @@
 # Claude Code Router
+[English](README.md) | [中文版](README_zh.md)
 
 > 一款强大的工具，可将 Claude Code 请求路由到不同的模型，并自定义任何请求。
 
@@ -321,6 +322,22 @@ jobs:
 
 这种设置可以实现有趣的自动化，例如在非高峰时段运行任务以降低 API 成本。
 
+## 🌐 语言支持
+
+Claude Code Router 现已支持多语言。您可以通过以下方式切换界面语言：
+
+1. **环境变量**：将 `CLAUDE_ROUTER_LANG` 设置为您偏好的语言代码（例如：`en` 表示英语，`zh` 表示中文）
+   ```bash
+   export CLAUDE_ROUTER_LANG=zh
+   ccr status
+   ```
+
+2. **系统语言**：工具会自动从 `LANG` 环境变量检测您的系统语言
+
+当前支持的语言：
+- 英语 (en) - 默认
+- 中文 (zh)
+
 ## 📝 深入阅读
 
 -   [项目动机和工作原理](blog/zh/项目初衷及原理.md)
@@ -372,7 +389,7 @@ jobs:
 - @*汀
 - @*涯
 - @*:-）
-- @**磊
+- @**磊   
 - @*琢
 - @*成
 - @Z*o

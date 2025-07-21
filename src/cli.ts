@@ -8,24 +8,29 @@ import { spawn } from "child_process";
 import { PID_FILE, REFERENCE_COUNT_FILE } from "./constants";
 import fs, { existsSync, readFileSync } from "fs";
 import {join} from "path";
+import i18n, { t } from "./i18n";
 
 const command = process.argv[2];
 
-const HELP_TEXT = `
-Usage: ccr [command]
+const getHelpText = () => `${t('cli.help.usage')}
 
-Commands:
-  start         Start server 
-  stop          Stop server
-  restart       Restart server
-  status        Show server status
-  code          Execute claude command
-  -v, version   Show version information
-  -h, help      Show help information
+${t('cli.help.description')}
+
+${t('cli.help.commands.title')}
+${t('cli.help.commands.start')}
+${t('cli.help.commands.stop')}
+${t('cli.help.commands.status')}
+${t('cli.help.commands.restart')}
+${t('cli.help.commands.proxy')}
+${t('cli.help.commands.default')}
+
+${t('cli.help.options.title')}
+${t('cli.help.options.version')}
+${t('cli.help.options.help')}
 
 Example:
   ccr start
-  ccr code "Write a Hello World"
+  ccr status
 `;
 
 async function waitForService(
@@ -64,13 +69,9 @@ async function main() {
             // Ignore cleanup errors
           }
         }
-        console.log(
-          "claude code router service has been successfully stopped."
-        );
+        console.log(t('cli.messages.stopSuccess'));
       } catch (e) {
-        console.log(
-          "Failed to stop the service. It may have already been stopped."
-        );
+        console.log(t('cli.messages.stopFailed'));
         cleanupPidFile();
       }
       break;
@@ -79,7 +80,7 @@ async function main() {
       break;
     case "code":
       if (!isServiceRunning()) {
-        console.log("Service not running, starting service...");
+        console.log(t('cli.messages.serviceNotRunning'));
         const cliPath = join(__dirname, "cli.js");
         const startProcess = spawn("node", [cliPath, "start"], {
           detached: true,
@@ -87,7 +88,7 @@ async function main() {
         });
 
         startProcess.on("error", (error) => {
-          console.error("Failed to start service:", error);
+          console.error(t('cli.messages.startFailed'), error);
           process.exit(1);
         });
 
@@ -96,9 +97,7 @@ async function main() {
         if (await waitForService()) {
           executeCodeCommand(process.argv.slice(3));
         } else {
-          console.error(
-            "Service startup timeout, please manually run `ccr start` to start the service"
-          );
+          console.error(t('cli.messages.startupTimeout'));
           process.exit(1);
         }
       } else {
@@ -111,10 +110,10 @@ async function main() {
       break;
     case "-h":
     case "help":
-      console.log(HELP_TEXT);
+      console.log(getHelpText());
       break;
     default:
-      console.log(HELP_TEXT);
+      console.log(getHelpText());
       process.exit(1);
   }
 }

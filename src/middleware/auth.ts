@@ -1,4 +1,5 @@
 import { FastifyRequest, FastifyReply } from "fastify";
+import { t } from '../i18n';
 
 export const apiKeyAuth =
   (config: any) =>
@@ -15,7 +16,7 @@ export const apiKeyAuth =
     const authKey: string =
       req.headers.authorization || req.headers["x-api-key"];
     if (!authKey) {
-      reply.status(401).send("APIKEY is missing");
+      reply.status(401).send(t('auth.missingApiKey'));
       return;
     }
     let token = "";
@@ -25,7 +26,7 @@ export const apiKeyAuth =
       token = authKey;
     }
     if (token !== apiKey) {
-      reply.status(401).send("Invalid API key");
+      reply.status(401).send(t('auth.invalidApiKey'));
       return;
     }
 

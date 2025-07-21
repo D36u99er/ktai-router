@@ -6,6 +6,7 @@ import {
   HOME_DIR,
   PLUGINS_DIR,
 } from "../constants";
+import { t } from '../i18n';
 
 const ensureDir = async (dir_path: string) => {
   try {
@@ -47,10 +48,10 @@ export const readConfigFile = async () => {
     const config = await fs.readFile(CONFIG_FILE, "utf-8");
     return JSON.parse(config);
   } catch {
-    const name = await question("Enter Provider Name: ");
-    const APIKEY = await question("Enter Provider API KEY: ");
-    const baseUrl = await question("Enter Provider URL: ");
-    const model = await question("Enter MODEL Name: ");
+    const name = await question(t('prompts.providerName'));
+    const APIKEY = await question(t('prompts.apiKey'));
+    const baseUrl = await question(t('prompts.url'));
+    const model = await question(t('prompts.modelName'));
     const config = Object.assign({}, DEFAULT_CONFIG, {
       Providers: [
         {

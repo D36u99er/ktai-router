@@ -12,6 +12,7 @@ import {
   savePid,
 } from "./utils/processCheck";
 import { CONFIG_FILE } from "./constants";
+import { t } from './i18n';
 
 async function initializeClaudeConfig() {
   const homeDir = homedir();
@@ -40,7 +41,7 @@ interface RunOptions {
 async function run(options: RunOptions = {}) {
   // Check if service is already running
   if (isServiceRunning()) {
-    console.log("✅ Service is already running in the background.");
+    console.log(t('service.alreadyRunning'));
     return;
   }
 
@@ -51,9 +52,7 @@ async function run(options: RunOptions = {}) {
 
   if (config.HOST && !config.APIKEY) {
     HOST = "127.0.0.1";
-    console.warn(
-      "⚠️ API key is not set. HOST is forced to 127.0.0.1."
-    );
+    console.warn(t('service.apiKeyWarning'));
   }
 
   const port = config.PORT || 3456;
@@ -63,7 +62,7 @@ async function run(options: RunOptions = {}) {
 
   // Handle SIGINT (Ctrl+C) to clean up PID file
   process.on("SIGINT", () => {
-    console.log("Received SIGINT, cleaning up...");
+    console.log(t('service.sigintReceived'));
     cleanupPidFile();
     process.exit(0);
   });

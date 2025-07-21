@@ -5,6 +5,7 @@ import {
 } from "./processCheck";
 import { closeService } from "./close";
 import { readConfigFile } from ".";
+import { t } from '../i18n';
 
 export async function executeCodeCommand(args: string[] = []) {
   // Set environment variables
@@ -33,10 +34,8 @@ export async function executeCodeCommand(args: string[] = []) {
   });
 
   claudeProcess.on("error", (error) => {
-    console.error("Failed to start claude command:", error.message);
-    console.log(
-      "Make sure Claude Code is installed: npm install -g @anthropic-ai/claude-code"
-    );
+    console.error(t('codeCommand.errors.failedToStart'), error.message);
+    console.log(t('codeCommand.errors.installHint'));
     decrementReferenceCount();
     process.exit(1);
   });

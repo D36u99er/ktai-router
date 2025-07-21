@@ -325,6 +325,22 @@ jobs:
 
 This setup allows for interesting automations, like running tasks during off-peak hours to reduce API costs.
 
+## 🌐 Language Support
+
+Claude Code Router now supports multiple languages. You can switch the interface language using:
+
+1. **Environment Variable**: Set `CLAUDE_ROUTER_LANG` to your preferred language code (e.g., `en` for English, `zh` for Chinese)
+   ```bash
+   export CLAUDE_ROUTER_LANG=zh
+   ccr status
+   ```
+
+2. **System Language**: The tool automatically detects your system language from the `LANG` environment variable
+
+Currently supported languages:
+- English (en) - Default
+- Chinese (zh)
+
 ## 📝 Further Reading
 
 -   [Project Motivation and How It Works](blog/en/project-motivation-and-how-it-works.md)
