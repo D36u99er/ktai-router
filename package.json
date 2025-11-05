@@ -1,12 +1,12 @@
 {
   "name": "ktai-router",
-  "version": "1.0.25",
-  "description": "Use Claude Code without an Anthropics account and route it to another LLM provider | 无需 Anthropic 账号使用 Claude Code，并将其路由到其他 LLM 提供商",
+  "version": "1.0.65",
+  "description": "Use Claude Code without an Anthropics account and route it to another LLM provider | 无需 Anthropic 账号使用 Claude Code,并将其路由到其他 LLM 提供商",
   "bin": {
-    "ccr": "./dist/cli.js"
+    "ccr": "dist/cli.js"
   },
   "scripts": {
-    "build": "esbuild src/cli.ts --bundle --platform=node --outfile=dist/cli.js && shx cp node_modules/tiktoken/tiktoken_bg.wasm dist/tiktoken_bg.wasm && shx cp -r src/locales dist/",
+    "build": "node scripts/build.js",
     "release": "npm run build && npm publish"
   },
   "keywords": [
@@ -19,9 +19,18 @@
   "author": "musistudio",
   "license": "MIT",
   "dependencies": {
-    "@musistudio/llms": "^1.0.11",
+    "@fastify/static": "^8.2.0",
+    "@musistudio/llms": "^1.0.39",
+    "@inquirer/prompts": "^5.0.0",
     "dotenv": "^16.4.7",
+    "find-process": "^2.0.0",
     "i18next": "^25.3.2",
+    "json5": "^2.2.3",
+    "lru-cache": "^11.2.2",
+    "minimist": "^1.2.8",
+    "openurl": "^1.1.1",
+    "rotating-file-stream": "^3.2.7",
+    "shell-quote": "^1.8.3",
     "tiktoken": "^1.0.21",
     "uuid": "^11.1.0"
   },

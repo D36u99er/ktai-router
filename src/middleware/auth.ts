@@ -3,18 +3,34 @@ import { t } from '../i18n';
 
 export const apiKeyAuth =
   (config: any) =>
-  (req: FastifyRequest, reply: FastifyReply, done: () => void) => {
-    if (["/", "/health"].includes(req.url)) {
+  async (req: FastifyRequest, reply: FastifyReply, done: () => void) => {
+    // Public endpoints that don't require authentication
+    if (["/", "/health"].includes(req.url) || req.url.startsWith("/ui")) {
       return done();
     }
+
     const apiKey = config.APIKEY;
-
     if (!apiKey) {
+      // If no API key is set, enable CORS for local
+      const allowedOrigins = [
+        `http://127.0.0.1:${config.PORT || 3456}`,
+        `http://localhost:${config.PORT || 3456}`,
+      ];
+      if (req.headers.origin && !allowedOrigins.includes(req.headers.origin)) {
+        reply.status(403).send("CORS not allowed for this origin");
+        return;
+      } else {
+        reply.header('Access-Control-Allow-Origin', `http://127.0.0.1:${config.PORT || 3456}`);
+        reply.header('Access-Control-Allow-Origin', `http://localhost:${config.PORT || 3456}`);
+      }
       return done();
     }
 
-    const authKey: string =
+    const authHeaderValue =
       req.headers.authorization || req.headers["x-api-key"];
+    const authKey: string = Array.isArray(authHeaderValue)
+      ? authHeaderValue[0]
+      : authHeaderValue || "";
     if (!authKey) {
       reply.status(401).send(t('auth.missingApiKey'));
       return;
@@ -25,6 +41,7 @@ export const apiKeyAuth =
     } else {
       token = authKey;
     }
+
     if (token !== apiKey) {
       reply.status(401).send(t('auth.invalidApiKey'));
       return;
