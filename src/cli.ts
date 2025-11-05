@@ -106,7 +106,7 @@ async function main() {
       break;
     case "-v":
     case "version":
-      console.log(`claude-code-router version: ${version}`);
+      console.log(`ktai-router version: ${version}`);
       break;
     case "-h":
     case "help":

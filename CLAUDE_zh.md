@@ -9,4 +9,4 @@
 ## 架构
 - 使用 `express` 进行路由（参见 `src/server.ts`）
 - 使用 `esbuild` 进行 CLI 分发打包
-- 插件从 `$HOME/.claude-code-router/plugins` 加载
+- 插件从 `$HOME/.ktai-router/plugins` 加载

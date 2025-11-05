@@ -1,8 +1,8 @@
-# Claude Code Router
+# KTAI Router
 
 [中文版](README_zh.md)
 
-> A powerful tool to route Claude Code requests to different models and customize any request.
+> Formerly known as Claude Code Router. A powerful tool to route Claude Code requests to different models and customize any request.
 
 ![](blog/images/claude-code.png)
 
@@ -25,19 +25,19 @@ First, ensure you have [Claude Code](https://docs.anthropic.com/en/docs/claude-c
 npm install -g @anthropic-ai/claude-code
 ```
 
-Then, install Claude Code Router:
+Then, install KTAI Router:
 
 ```shell
-npm install -g @musistudio/claude-code-router
+npm install -g ktai-router
 ```
 
 ### 2. Configuration
 
-Create and configure your `~/.claude-code-router/config.json` file. For more details, you can refer to `config.example.json`.
+Create and configure your `~/.ktai-router/config.json` file. For more details, you can refer to `config.example.json`.
 
 The `config.json` file has several key sections:
 - **`PROXY_URL`** (optional): You can set a proxy for API requests, for example: `"PROXY_URL": "http://127.0.0.1:7890"`.
-- **`LOG`** (optional): You can enable logging by setting it to `true`. The log file will be located at `$HOME/.claude-code-router.log`.
+- **`LOG`** (optional): You can enable logging by setting it to `true`. The log file will be located at `$HOME/.ktai-router.log`.
 - **`APIKEY`** (optional): You can set a secret key to authenticate requests. When set, clients must provide this key in the `Authorization` header (e.g., `Bearer your-secret-key`) or the `x-api-key` header. Example: `"APIKEY": "your-secret-key"`.
 - **`HOST`** (optional): You can set the host address for the server. If `APIKEY` is not set, the host will be forced to `127.0.0.1` for security reasons to prevent unauthorized access. Example: `"HOST": "0.0.0.0"`.
 
@@ -202,7 +202,7 @@ You can also create your own transformers and load them via the `transformers` f
 {
   "transformers": [
       {
-        "path": "$HOME/.claude-code-router/plugins/gemini-cli.js",
+        "path": "$HOME/.ktai-router/plugins/gemini-cli.js",
         "options": {
           "project": "xxx"
         }
@@ -234,7 +234,7 @@ In your `config.json`:
 
 ```json
 {
-  "CUSTOM_ROUTER_PATH": "$HOME/.claude-code-router/custom-router.js"
+  "CUSTOM_ROUTER_PATH": "$HOME/.ktai-router/custom-router.js"
 }
 ```
 
@@ -243,7 +243,7 @@ The custom router file must be a JavaScript module that exports an `async` funct
 Here is an example of a `custom-router.js` based on `custom-router.example.js`:
 
 ```javascript
-// $HOME/.claude-code-router/custom-router.js
+// $HOME/.ktai-router/custom-router.js
 
 /**
  * A custom router function to determine which model to use based on the request.
@@ -298,8 +298,8 @@ jobs:
       - name: Prepare Environment
         run: |
           curl -fsSL https://bun.sh/install | bash
-          mkdir -p $HOME/.claude-code-router
-          cat << 'EOF' > $HOME/.claude-code-router/config.json
+          mkdir -p $HOME/.ktai-router
+          cat << 'EOF' > $HOME/.ktai-router/config.json
           {
             "log": true,
             "OPENAI_API_KEY": "${{ secrets.OPENAI_API_KEY }}",
@@ -311,7 +311,7 @@ jobs:
 
       - name: Start Claude Code Router
         run: |
-          nohup ~/.bun/bin/bunx @musistudio/claude-code-router@1.0.8 start &
+          nohup ~/.bun/bin/bunx ktai-router@1.0.8 start &
         shell: bash
 
       - name: Run Claude Code

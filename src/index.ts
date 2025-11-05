@@ -87,8 +87,8 @@ async function run(options: RunOptions = {}) {
       PORT: servicePort,
       LOG_FILE: join(
         homedir(),
-        ".claude-code-router",
-        "claude-code-router.log"
+        ".ktai-router",
+        "ktai-router.log"
       ),
     },
   });

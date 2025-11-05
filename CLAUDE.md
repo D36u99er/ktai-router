@@ -9,4 +9,4 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Architecture
 - Uses `express` for routing (see `src/server.ts`)
 - Bundles with `esbuild` for CLI distribution
-- Plugins are loaded from `$HOME/.claude-code-router/plugins`
+- Plugins are loaded from `$HOME/.ktai-router/plugins`

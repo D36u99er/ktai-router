@@ -5,7 +5,7 @@ import { join } from 'path';
 import { t } from '../i18n';
 
 export async function closeService() {
-    const PID_FILE = join(HOME_DIR, '.claude-code-router.pid');
+    const PID_FILE = join(HOME_DIR, '.ktai-router.pid');
     
     if (!isServiceRunning()) {
         console.log(t('close.noService'));

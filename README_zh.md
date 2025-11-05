@@ -1,7 +1,7 @@
-# Claude Code Router
+# KTAI Router
 [English](README.md) | [中文版](README_zh.md)
 
-> 一款强大的工具，可将 Claude Code 请求路由到不同的模型，并自定义任何请求。
+> 原名 Claude Code Router。如需将 Claude Code 请求路由到不同的模型并自定义任意请求，这款工具可以帮到你。
 
 ![](blog/images/claude-code.png)
 
@@ -24,19 +24,19 @@
 npm install -g @anthropic-ai/claude-code
 ```
 
-然后，安装 Claude Code Router：
+然后，安装 KTAI Router：
 
 ```shell
-npm install -g @musistudio/claude-code-router
+npm install -g ktai-router
 ```
 
 ### 2. 配置
 
-创建并配置您的 `~/.claude-code-router/config.json` 文件。有关更多详细信息，您可以参考 `config.example.json`。
+创建并配置您的 `~/.ktai-router/config.json` 文件。有关更多详细信息，您可以参考 `config.example.json`。
 
 `config.json` 文件有几个关键部分：
 - **`PROXY_URL`** (可选): 您可以为 API 请求设置代理，例如：`"PROXY_URL": "http://127.0.0.1:7890"`。
-- **`LOG`** (可选): 您可以通过将其设置为 `true` 来启用日志记录。日志文件将位于 `$HOME/.claude-code-router.log`。
+- **`LOG`** (可选): 您可以通过将其设置为 `true` 来启用日志记录。日志文件将位于 `$HOME/.ktai-router.log`。
 - **`APIKEY`** (可选): 您可以设置一个密钥来进行身份验证。设置后，客户端请求必须在 `Authorization` 请求头 (例如, `Bearer your-secret-key`) 或 `x-api-key` 请求头中提供此密钥。例如：`"APIKEY": "your-secret-key"`。
 - **`HOST`** (可选): 您可以设置服务的主机地址。如果未设置 `APIKEY`，出于安全考虑，主机地址将强制设置为 `127.0.0.1`，以防止未经授权的访问。例如：`"HOST": "0.0.0.0"`。
 - **`Providers`**: 用于配置不同的模型提供商。
@@ -200,7 +200,7 @@ Transformers 允许您修改请求和响应负载，以确保与不同提供商 
 {
   "transformers": [
       {
-        "path": "$HOME/.claude-code-router/plugins/gemini-cli.js",
+        "path": "$HOME/.ktai-router/plugins/gemini-cli.js",
         "options": {
           "project": "xxx"
         }
@@ -231,7 +231,7 @@ Transformers 允许您修改请求和响应负载，以确保与不同提供商 
 
 ```json
 {
-  "CUSTOM_ROUTER_PATH": "$HOME/.claude-code-router/custom-router.js"
+  "CUSTOM_ROUTER_PATH": "$HOME/.ktai-router/custom-router.js"
 }
 ```
 
@@ -240,7 +240,7 @@ Transformers 允许您修改请求和响应负载，以确保与不同提供商 
 这是一个基于 `custom-router.example.js` 的 `custom-router.js` 示例：
 
 ```javascript
-// $HOME/.claude-code-router/custom-router.js
+// $HOME/.ktai-router/custom-router.js
 
 /**
  * 一个自定义路由函数，用于根据请求确定使用哪个模型。
@@ -295,8 +295,8 @@ jobs:
       - name: Prepare Environment
         run: |
           curl -fsSL https://bun.sh/install | bash
-          mkdir -p $HOME/.claude-code-router
-          cat << 'EOF' > $HOME/.claude-code-router/config.json
+          mkdir -p $HOME/.ktai-router
+          cat << 'EOF' > $HOME/.ktai-router/config.json
           {
             "log": true,
             "OPENAI_API_KEY": "${{ secrets.OPENAI_API_KEY }}",
@@ -308,7 +308,7 @@ jobs:
 
       - name: Start Claude Code Router
         run: |
-          nohup ~/.bun/bin/bunx @musistudio/claude-code-router@1.0.8 start &
+          nohup ~/.bun/bin/bunx ktai-router@1.0.8 start &
         shell: bash
 
       - name: Run Claude Code

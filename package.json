@@ -1,5 +1,5 @@
 {
-  "name": "@musistudio/claude-code-router",
+  "name": "ktai-router",
   "version": "1.0.25",
   "description": "Use Claude Code without an Anthropics account and route it to another LLM provider | 无需 Anthropic 账号使用 Claude Code，并将其路由到其他 LLM 提供商",
   "bin": {

@@ -1,6 +1,6 @@
 # 或许我们能在 Router 中做更多事情
 
-自从`claude-code-router`发布以来，我收到了很多用户的反馈，至今还有不少的 issues 未处理。其中大多都是关于不同的供应商的支持和`deepseek`模型调用工具不积极的问题。
+自从`ktai-router`（原名 `claude-code-router`）发布以来，我收到了很多用户的反馈，至今还有不少的 issues 未处理。其中大多都是关于不同的供应商的支持和`deepseek`模型调用工具不积极的问题。
 之前开发这个项目主要是为了我自己能以较低成本使用上`claude code`，所以一开始的设计并没有考虑到多供应商的情况。在实际的排查问题中，我发现尽管市面上所有的供应商几乎都宣称兼容`OpenAI`格式调用，即通过`/chat/compeletions`接口调用，但是其中的细节差异非常多。例如:
 
 1. Gemini 的工具参数类型是 string 时，`format`参数只支持`date`和`date-time`，并且没有工具调用 ID。
@@ -19,7 +19,7 @@ AnthropicRequest -> AnthropicTransformer -> OpenAIRequest -> GeminiTransformer -
 GeminiReseponse -> GeminiTransformer -> OpenAIResponse -> AnthropicTransformer -> AnthropicResponse
 ```
 
-虽然使用中间层抹平差异可能会带来一些性能问题，但是该项目最初的目的是为了让`claude-code-router`支持不同的供应商。
+虽然使用中间层抹平差异可能会带来一些性能问题，但是该项目最初的目的是为了让`ktai-router`支持不同的供应商。
 
 至于`deepseek`模型调用工具不积极的问题，我发现这是由于`deepseek`在长上下文中的指令遵循不佳导致的。现象就是刚开始模型会主动调用工具，但是在经过几轮对话后模型只会返回文本。一开始的解决方案是通过注入一个系统提示词告知模型需要积极去使用工具以解决用户的问题，但是后面测试发现在长上下文中模型会遗忘该指令。
 查看`deepseek`文档后发现模型支持`tool_choice`参数，可以强制让模型最少调用 1 个工具，我尝试将该值设置为`required`，发现模型调用工具的积极性大大增加，现在我们只需要在合适的时候取消这个参数即可。借助[musistudio/llms](https://github.com/musistudio/llms)的`Transformer`可以让我们在发送请求前和收到响应后做点什么，所以我参考`claude code`的`Plan Mode`，实现了一个使用与`deepseek`的`Tool Mode`

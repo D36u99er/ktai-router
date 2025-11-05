@@ -78,7 +78,7 @@ Therefore, we need:
 
 2. Set the environment variables before launching Claude Code to redirect requests to this service.
 
-Thus, `claude-code-router` was born. This project uses `Express.js` to implement the `/v1/messages` endpoint. It leverages middlewares to transform request/response formats and supports request rewriting (useful for prompt tuning per model).
+Thus, `ktai-router` was born (it was previously called `claude-code-router`). This project uses `Express.js` to implement the `/v1/messages` endpoint. It leverages middlewares to transform request/response formats and supports request rewriting (useful for prompt tuning per model).
 
 Back in February, the full DeepSeek model series had poor support for Function Calling, so I initially used `qwen-max`. It worked well—but without KV cache support, it consumed a large number of tokens and couldn’t provide the native `Claude Code` experience.
 

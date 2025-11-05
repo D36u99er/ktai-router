@@ -1,6 +1,6 @@
 # Maybe We Can Do More with the Router
 
-Since the release of `claude-code-router`, I’ve received a lot of user feedback, and quite a few issues are still open. Most of them are related to support for different providers and the lack of tool usage from the deepseek model.
+Since the release of `ktai-router` (formerly `claude-code-router`), I’ve received a lot of user feedback, and quite a few issues are still open. Most of them are related to support for different providers and the lack of tool usage from the deepseek model.
 
 Originally, I created this project for personal use, mainly to access claude code at a lower cost. So, multi-provider support wasn’t part of the initial design. But during troubleshooting, I discovered that even though most providers claim to be compatible with the OpenAI-style `/chat/completions` interface, there are many subtle differences. For example:
 
@@ -24,7 +24,7 @@ AnthropicRequest -> AnthropicTransformer -> OpenAIRequest -> GeminiTransformer -
 GeminiResponse -> GeminiTransformer -> OpenAIResponse -> AnthropicTransformer -> AnthropicResponse
 ```
 
-Using a middleware layer to smooth out differences may introduce some performance overhead, but the main goal here is to enable `claude-code-router` to support multiple providers.
+Using a middleware layer to smooth out differences may introduce some performance overhead, but the main goal here is to enable `ktai-router` to support multiple providers.
 
 As for the issue of DeepSeek’s lackluster tool usage — I found that it stems from poor instruction adherence in long conversations. Initially, the model actively calls tools, but after several rounds, it starts responding with plain text instead. My first workaround was injecting a system prompt to remind the model to use tools proactively. But in long contexts, the model tends to forget this instruction.
 
