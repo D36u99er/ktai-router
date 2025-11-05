@@ -1,91 +1,68 @@
 ![](blog/images/claude-code-router-img.png)
 
-[![](https://img.shields.io/badge/%F0%9F%87%A8%F0%9F%87%B3-%E4%B8%AD%E6%96%87%E7%89%88-ff0000?style=flat)](README_zh.md)
+[![](https://img.shields.io/badge/%F0%9F%87%AC%F0%9F%87%A7-English-000aff?style=flat)](README_en.md)
 [![Discord](https://img.shields.io/badge/Discord-%235865F2.svg?&logo=discord&logoColor=white)](https://discord.gg/rdftVMaUcS)
 [![](https://img.shields.io/github/license/musistudio/claude-code-router)](https://github.com/musistudio/claude-code-router/blob/main/LICENSE)
 
 <hr>
 
-> I am currently seeking **Agent development related job opportunities**, either **based in Hangzhou** or **remote**. If you are interested in my projects or have suitable opportunities, feel free to reach out! 📧 Email: m@musiiot.top
+> 我目前正在寻找 **Agent 开发相关的工作机会**，可 base 在 **杭州**，也接受 **远程** 合作。如果你对我的项目感兴趣，或有合适的岗位/合作机会，欢迎联系我！ 📧 Email: m@musiiot.top
 
-> A powerful tool to route Claude Code requests to different models and customize any request.
+> 一款强大的工具，可将 Claude Code 请求路由到不同的模型，并自定义任何请求。
 
-> Now you can use models such as `GLM-4.5`, `Kimi-K2`, `Qwen3-Coder-480B-A35B`, and `DeepSeek v3.1` for free through the [iFlow Platform](https://platform.iflow.cn/docs/api-mode).     
-> You can use the `ccr ui` command to directly import the `iflow` template in the UI. It’s worth noting that iFlow limits each user to a concurrency of 1, which means you’ll need to route background requests to other models.      
-> If you’d like a better experience, you can try [iFlow CLI](https://cli.iflow.cn).
+> 现在你可以通过[心流平台](https://platform.iflow.cn/docs/api-mode)免费使用`GLM-4.5`、`Kimi-K2`、`Qwen3-Coder-480B-A35B`、`DeepSeek v3.1`等模型。     
+> 你可以使用`ccr ui`命令在UI中直接导入`iflow`模板，值得注意的是心流限制每位用户的并发数为1，意味着你需要将`background`路由到其他模型。      
+> 如果你想获得更好的体验，可以尝试[iFlow CLI](https://cli.iflow.cn)。      
 
 ![](blog/images/claude-code.png)
 
 ![](blog/images/roadmap.svg)
 
-## ✨ Features
 
-- **Model Routing**: Route requests to different models based on your needs (e.g., background tasks, thinking, long context).
-- **Multi-Provider Support**: Supports various model providers like OpenRouter, DeepSeek, Ollama, Gemini, Volcengine, and SiliconFlow.
-- **Request/Response Transformation**: Customize requests and responses for different providers using transformers.
-- **Dynamic Model Switching**: Switch models on-the-fly within Claude Code using the `/model` command.
-- **CLI Model Management**: Manage models and providers directly from the terminal with `ccr model`.
-- **GitHub Actions Integration**: Trigger Claude Code tasks in your GitHub workflows.
-- **Plugin System**: Extend functionality with custom transformers.
+## ✨ 功能
 
-## 🚀 Getting Started
+-   **模型路由**: 根据您的需求将请求路由到不同的模型（例如，后台任务、思考、长上下文）。
+-   **多提供商支持**: 支持 OpenRouter、DeepSeek、Ollama、Gemini、Volcengine 和 SiliconFlow 等各种模型提供商。
+-   **请求/响应转换**: 使用转换器为不同的提供商自定义请求和响应。
+-   **动态模型切换**: 在 Claude Code 中使用 `/model` 命令动态切换模型。
+-   **GitHub Actions 集成**: 在您的 GitHub 工作流程中触发 Claude Code 任务。
+-   **插件系统**: 使用自定义转换器扩展功能。
 
-### 1. Installation
+## 🚀 快速入门
 
-First, ensure you have [Claude Code](https://docs.anthropic.com/en/docs/claude-code/quickstart) installed:
+### 1. 安装
+
+首先，请确保您已安装 [Claude Code](https://docs.anthropic.com/en/docs/claude-code/quickstart)：
 
 ```shell
 npm install -g @anthropic-ai/claude-code
 ```
 
-Then, install Claude Code Router:
+然后，安装 Claude Code Router：
 
 ```shell
 npm install -g @musistudio/claude-code-router
 ```
 
-### 2. Configuration
+### 2. 配置
 
-Create and configure your `~/.claude-code-router/config.json` file. For more details, you can refer to `config.example.json`.
+创建并配置您的 `~/.claude-code-router/config.json` 文件。有关更多详细信息，您可以参考 `config.example.json`。
 
-The `config.json` file has several key sections:
+`config.json` 文件有几个关键部分：
+- **`PROXY_URL`** (可选): 您可以为 API 请求设置代理，例如：`"PROXY_URL": "http://127.0.0.1:7890"`。
+- **`LOG`** (可选): 您可以通过将其设置为 `true` 来启用日志记录。当设置为 `false` 时，将不会创建日志文件。默认值为 `true`。
+- **`LOG_LEVEL`** (可选): 设置日志级别。可用选项包括：`"fatal"`、`"error"`、`"warn"`、`"info"`、`"debug"`、`"trace"`。默认值为 `"debug"`。
+- **日志系统**: Claude Code Router 使用两个独立的日志系统：
+  - **服务器级别日志**: HTTP 请求、API 调用和服务器事件使用 pino 记录在 `~/.claude-code-router/logs/` 目录中，文件名类似于 `ccr-*.log`
+  - **应用程序级别日志**: 路由决策和业务逻辑事件记录在 `~/.claude-code-router/claude-code-router.log` 文件中
+- **`APIKEY`** (可选): 您可以设置一个密钥来进行身份验证。设置后，客户端请求必须在 `Authorization` 请求头 (例如, `Bearer your-secret-key`) 或 `x-api-key` 请求头中提供此密钥。例如：`"APIKEY": "your-secret-key"`。
+- **`HOST`** (可选): 您可以设置服务的主机地址。如果未设置 `APIKEY`，出于安全考虑，主机地址将强制设置为 `127.0.0.1`，以防止未经授权的访问。例如：`"HOST": "0.0.0.0"`。
+- **`NON_INTERACTIVE_MODE`** (可选): 当设置为 `true` 时，启用与非交互式环境（如 GitHub Actions、Docker 容器或其他 CI/CD 系统）的兼容性。这会设置适当的环境变量（`CI=true`、`FORCE_COLOR=0` 等）并配置 stdin 处理，以防止进程在自动化环境中挂起。例如：`"NON_INTERACTIVE_MODE": true`。
+- **`Providers`**: 用于配置不同的模型提供商。
+- **`Router`**: 用于设置路由规则。`default` 指定默认模型，如果未配置其他路由，则该模型将用于所有请求。
+- **`API_TIMEOUT_MS`**: API 请求超时时间，单位为毫秒。
 
-- **`PROXY_URL`** (optional): You can set a proxy for API requests, for example: `"PROXY_URL": "http://127.0.0.1:7890"`.
-- **`LOG`** (optional): You can enable logging by setting it to `true`. When set to `false`, no log files will be created. Default is `true`.
-- **`LOG_LEVEL`** (optional): Set the logging level. Available options are: `"fatal"`, `"error"`, `"warn"`, `"info"`, `"debug"`, `"trace"`. Default is `"debug"`.
-- **Logging Systems**: The Claude Code Router uses two separate logging systems:
-  - **Server-level logs**: HTTP requests, API calls, and server events are logged using pino in the `~/.claude-code-router/logs/` directory with filenames like `ccr-*.log`
-  - **Application-level logs**: Routing decisions and business logic events are logged in `~/.claude-code-router/claude-code-router.log`
-- **`APIKEY`** (optional): You can set a secret key to authenticate requests. When set, clients must provide this key in the `Authorization` header (e.g., `Bearer your-secret-key`) or the `x-api-key` header. Example: `"APIKEY": "your-secret-key"`.
-- **`HOST`** (optional): You can set the host address for the server. If `APIKEY` is not set, the host will be forced to `127.0.0.1` for security reasons to prevent unauthorized access. Example: `"HOST": "0.0.0.0"`.
-- **`NON_INTERACTIVE_MODE`** (optional): When set to `true`, enables compatibility with non-interactive environments like GitHub Actions, Docker containers, or other CI/CD systems. This sets appropriate environment variables (`CI=true`, `FORCE_COLOR=0`, etc.) and configures stdin handling to prevent the process from hanging in automated environments. Example: `"NON_INTERACTIVE_MODE": true`.
-
-- **`Providers`**: Used to configure different model providers.
-- **`Router`**: Used to set up routing rules. `default` specifies the default model, which will be used for all requests if no other route is configured.
-- **`API_TIMEOUT_MS`**: Specifies the timeout for API calls in milliseconds.
-
-#### Environment Variable Interpolation
-
-Claude Code Router supports environment variable interpolation for secure API key management. You can reference environment variables in your `config.json` using either `$VAR_NAME` or `${VAR_NAME}` syntax:
-
-```json
-{
-  "OPENAI_API_KEY": "$OPENAI_API_KEY",
-  "GEMINI_API_KEY": "${GEMINI_API_KEY}",
-  "Providers": [
-    {
-      "name": "openai",
-      "api_base_url": "https://api.openai.com/v1/chat/completions",
-      "api_key": "$OPENAI_API_KEY",
-      "models": ["gpt-5", "gpt-5-mini"]
-    }
-  ]
-}
-```
-
-This allows you to keep sensitive API keys in environment variables instead of hardcoding them in configuration files. The interpolation works recursively through nested objects and arrays.
-
-Here is a comprehensive example:
+这是一个综合示例：
 
 ```json
 {
@@ -204,195 +181,167 @@ Here is a comprehensive example:
 }
 ```
 
-### 3. Running Claude Code with the Router
 
-Start Claude Code using the router:
+### 3. 使用 Router 运行 Claude Code
+
+使用 router 启动 Claude Code：
 
 ```shell
 ccr code
 ```
 
-> **Note**: After modifying the configuration file, you need to restart the service for the changes to take effect:
->
+> **注意**: 修改配置文件后，需要重启服务使配置生效：
 > ```shell
 > ccr restart
 > ```
 
-### 4. UI Mode
+### 4. UI 模式
 
-For a more intuitive experience, you can use the UI mode to manage your configuration:
+为了获得更直观的体验，您可以使用 UI 模式来管理您的配置：
 
 ```shell
 ccr ui
 ```
 
-This will open a web-based interface where you can easily view and edit your `config.json` file.
+这将打开一个基于 Web 的界面，您可以在其中轻松查看和编辑您的 `config.json` 文件。
 
 ![UI](/blog/images/ui.png)
 
-### 5. CLI Model Management
-
-For users who prefer terminal-based workflows, you can use the interactive CLI model selector:
-
-```shell
-ccr model
-```
-![](blog/images/models.gif)
-
-This command provides an interactive interface to:
-
-- View current configuration:
-- See all configured models (default, background, think, longContext, webSearch, image)
-- Switch models: Quickly change which model is used for each router type
-- Add new models: Add models to existing providers
-- Create new providers: Set up complete provider configurations including:
-   - Provider name and API endpoint
-   - API key
-   - Available models
-   - Transformer configuration with support for:
-     - Multiple transformers (openrouter, deepseek, gemini, etc.)
-     - Transformer options (e.g., maxtoken with custom limits)
-     - Provider-specific routing (e.g., OpenRouter provider preferences)
-
-The CLI tool validates all inputs and provides helpful prompts to guide you through the configuration process, making it easy to manage complex setups without editing JSON files manually.
-
 #### Providers
 
-The `Providers` array is where you define the different model providers you want to use. Each provider object requires:
+`Providers` 数组是您定义要使用的不同模型提供商的地方。每个提供商对象都需要：
 
-- `name`: A unique name for the provider.
-- `api_base_url`: The full API endpoint for chat completions.
-- `api_key`: Your API key for the provider.
-- `models`: A list of model names available from this provider.
-- `transformer` (optional): Specifies transformers to process requests and responses.
+-   `name`: 提供商的唯一名称。
+-   `api_base_url`: 聊天补全的完整 API 端点。
+-   `api_key`: 您提供商的 API 密钥。
+-   `models`: 此提供商可用的模型名称列表。
+-   `transformer` (可选): 指定用于处理请求和响应的转换器。
 
 #### Transformers
 
-Transformers allow you to modify the request and response payloads to ensure compatibility with different provider APIs.
+Transformers 允许您修改请求和响应负载，以确保与不同提供商 API 的兼容性。
 
-- **Global Transformer**: Apply a transformer to all models from a provider. In this example, the `openrouter` transformer is applied to all models under the `openrouter` provider.
-  ```json
-  {
-    "name": "openrouter",
-    "api_base_url": "https://openrouter.ai/api/v1/chat/completions",
-    "api_key": "sk-xxx",
-    "models": [
-      "google/gemini-2.5-pro-preview",
-      "anthropic/claude-sonnet-4",
-      "anthropic/claude-3.5-sonnet"
-    ],
-    "transformer": { "use": ["openrouter"] }
-  }
-  ```
-- **Model-Specific Transformer**: Apply a transformer to a specific model. In this example, the `deepseek` transformer is applied to all models, and an additional `tooluse` transformer is applied only to the `deepseek-chat` model.
+-   **全局 Transformer**: 将转换器应用于提供商的所有模型。在此示例中，`openrouter` 转换器将应用于 `openrouter` 提供商下的所有模型。
+    ```json
+     {
+       "name": "openrouter",
+       "api_base_url": "https://openrouter.ai/api/v1/chat/completions",
+       "api_key": "sk-xxx",
+       "models": [
+         "google/gemini-2.5-pro-preview",
+         "anthropic/claude-sonnet-4",
+         "anthropic/claude-3.5-sonnet"
+       ],
+       "transformer": { "use": ["openrouter"] }
+     }
+    ```
+-   **特定于模型的 Transformer**: 将转换器应用于特定模型。在此示例中，`deepseek` 转换器应用于所有模型，而额外的 `tooluse` 转换器仅应用于 `deepseek-chat` 模型。
+    ```json
+     {
+       "name": "deepseek",
+       "api_base_url": "https://api.deepseek.com/chat/completions",
+       "api_key": "sk-xxx",
+       "models": ["deepseek-chat", "deepseek-reasoner"],
+       "transformer": {
+         "use": ["deepseek"],
+         "deepseek-chat": { "use": ["tooluse"] }
+       }
+     }
+    ```
 
-  ```json
-  {
-    "name": "deepseek",
-    "api_base_url": "https://api.deepseek.com/chat/completions",
-    "api_key": "sk-xxx",
-    "models": ["deepseek-chat", "deepseek-reasoner"],
-    "transformer": {
-      "use": ["deepseek"],
-      "deepseek-chat": { "use": ["tooluse"] }
-    }
-  }
-  ```
-
-- **Passing Options to a Transformer**: Some transformers, like `maxtoken`, accept options. To pass options, use a nested array where the first element is the transformer name and the second is an options object.
-  ```json
-  {
-    "name": "siliconflow",
-    "api_base_url": "https://api.siliconflow.cn/v1/chat/completions",
-    "api_key": "sk-xxx",
-    "models": ["moonshotai/Kimi-K2-Instruct"],
-    "transformer": {
-      "use": [
-        [
-          "maxtoken",
-          {
-            "max_tokens": 16384
-          }
-        ]
-      ]
-    }
-  }
-  ```
-
-**Available Built-in Transformers:**
-
-- `Anthropic`:If you use only the `Anthropic` transformer, it will preserve the original request and response parameters(you can use it to connect directly to an Anthropic endpoint).
-- `deepseek`: Adapts requests/responses for DeepSeek API.
-- `gemini`: Adapts requests/responses for Gemini API.
-- `openrouter`: Adapts requests/responses for OpenRouter API. It can also accept a `provider` routing parameter to specify which underlying providers OpenRouter should use. For more details, refer to the [OpenRouter documentation](https://openrouter.ai/docs/features/provider-routing). See an example below:
-  ```json
-    "transformer": {
-      "use": ["openrouter"],
-      "moonshotai/kimi-k2": {
+-   **向 Transformer 传递选项**: 某些转换器（如 `maxtoken`）接受选项。要传递选项，请使用嵌套数组，其中第一个元素是转换器名称，第二个元素是选项对象。
+    ```json
+    {
+      "name": "siliconflow",
+      "api_base_url": "https://api.siliconflow.cn/v1/chat/completions",
+      "api_key": "sk-xxx",
+      "models": ["moonshotai/Kimi-K2-Instruct"],
+      "transformer": {
         "use": [
           [
-            "openrouter",
+            "maxtoken",
             {
-              "provider": {
-                "only": ["moonshotai/fp8"]
-              }
+              "max_tokens": 16384
             }
           ]
         ]
       }
     }
-  ```
-- `groq`: Adapts requests/responses for groq API.
-- `maxtoken`: Sets a specific `max_tokens` value.
-- `tooluse`: Optimizes tool usage for certain models via `tool_choice`.
-- `gemini-cli` (experimental): Unofficial support for Gemini via Gemini CLI [gemini-cli.js](https://gist.github.com/musistudio/1c13a65f35916a7ab690649d3df8d1cd).
-- `reasoning`: Used to process the `reasoning_content` field.
-- `sampling`: Used to process sampling information fields such as `temperature`, `top_p`, `top_k`, and `repetition_penalty`.
-- `enhancetool`: Adds a layer of error tolerance to the tool call parameters returned by the LLM (this will cause the tool call information to no longer be streamed).
-- `cleancache`: Clears the `cache_control` field from requests.
-- `vertex-gemini`: Handles the Gemini API using Vertex authentication.
-- `chutes-glm` Unofficial support for GLM 4.5 model via Chutes [chutes-glm-transformer.js](https://gist.github.com/vitobotta/2be3f33722e05e8d4f9d2b0138b8c863).
-- `qwen-cli` (experimental): Unofficial support for qwen3-coder-plus model via Qwen CLI [qwen-cli.js](https://gist.github.com/musistudio/f5a67841ced39912fd99e42200d5ca8b).
-- `rovo-cli` (experimental): Unofficial support for gpt-5 via Atlassian Rovo Dev CLI [rovo-cli.js](https://gist.github.com/SaseQ/c2a20a38b11276537ec5332d1f7a5e53).
+    ```
 
-**Custom Transformers:**
+**可用的内置 Transformer：**
 
-You can also create your own transformers and load them via the `transformers` field in `config.json`.
+-   `Anthropic`: 如果你只使用这一个转换器，则会直接透传请求和响应(你可以用它来接入其他支持Anthropic端点的服务商)。
+-   `deepseek`: 适配 DeepSeek API 的请求/响应。
+-   `gemini`: 适配 Gemini API 的请求/响应。
+-   `openrouter`: 适配 OpenRouter API 的请求/响应。它还可以接受一个 `provider` 路由参数，以指定 OpenRouter 应使用哪些底层提供商。有关更多详细信息，请参阅 [OpenRouter 文档](https://openrouter.ai/docs/features/provider-routing)。请参阅下面的示例：
+    ```json
+      "transformer": {
+        "use": ["openrouter"],
+        "moonshotai/kimi-k2": {
+          "use": [
+            [
+              "openrouter",
+              {
+                "provider": {
+                  "only": ["moonshotai/fp8"]
+                }
+              }
+            ]
+          ]
+        }
+      }
+    ```
+-   `groq`: 适配 groq API 的请求/响应
+-   `maxtoken`: 设置特定的 `max_tokens` 值。
+-   `tooluse`: 优化某些模型的工具使用(通过`tool_choice`参数)。
+-   `gemini-cli` (实验性): 通过 Gemini CLI [gemini-cli.js](https://gist.github.com/musistudio/1c13a65f35916a7ab690649d3df8d1cd) 对 Gemini 的非官方支持。
+-   `reasoning`: 用于处理 `reasoning_content` 字段。
+-   `sampling`: 用于处理采样信息字段，如 `temperature`、`top_p`、`top_k` 和 `repetition_penalty`。
+-   `enhancetool`: 对 LLM 返回的工具调用参数增加一层容错处理（这会导致不再流式返回工具调用信息）。
+-   `cleancache`: 清除请求中的 `cache_control` 字段。
+-   `vertex-gemini`: 处理使用 vertex 鉴权的 gemini api。
+-   `qwen-cli` (实验性): 通过 Qwen CLI [qwen-cli.js](https://gist.github.com/musistudio/f5a67841ced39912fd99e42200d5ca8b) 对 qwen3-coder-plus 的非官方支持。
+-   `rovo-cli` (experimental): 通过 Atlassian Rovo Dev CLI [rovo-cli.js](https://gist.github.com/SaseQ/c2a20a38b11276537ec5332d1f7a5e53) 对 GPT-5 的非官方支持。
+
+**自定义 Transformer:**
+
+您还可以创建自己的转换器，并通过 `config.json` 中的 `transformers` 字段加载它们。
 
 ```json
 {
   "transformers": [
-    {
-      "path": "/User/xxx/.claude-code-router/plugins/gemini-cli.js",
-      "options": {
-        "project": "xxx"
+      {
+        "path": "/User/xxx/.claude-code-router/plugins/gemini-cli.js",
+        "options": {
+          "project": "xxx"
+        }
       }
-    }
   ]
 }
 ```
 
 #### Router
 
-The `Router` object defines which model to use for different scenarios:
+`Router` 对象定义了在不同场景下使用哪个模型：
 
-- `default`: The default model for general tasks.
-- `background`: A model for background tasks. This can be a smaller, local model to save costs.
-- `think`: A model for reasoning-heavy tasks, like Plan Mode.
-- `longContext`: A model for handling long contexts (e.g., > 60K tokens).
-- `longContextThreshold` (optional): The token count threshold for triggering the long context model. Defaults to 60000 if not specified.
-- `webSearch`: Used for handling web search tasks and this requires the model itself to support the feature. If you're using openrouter, you need to add the `:online` suffix after the model name.
-- `image` (beta): Used for handling image-related tasks (supported by CCR’s built-in agent). If the model does not support tool calling, you need to set the `config.forceUseImageAgent` property to `true`.
+-   `default`: 用于常规任务的默认模型。
+-   `background`: 用于后台任务的模型。这可以是一个较小的本地模型以节省成本。
+-   `think`: 用于推理密集型任务（如计划模式）的模型。
+-   `longContext`: 用于处理长上下文（例如，> 60K 令牌）的模型。
+-   `longContextThreshold` (可选): 触发长上下文模型的令牌数阈值。如果未指定，默认为 60000。
+-   `webSearch`: 用于处理网络搜索任务，需要模型本身支持。如果使用`openrouter`需要在模型后面加上`:online`后缀。
+-   `image`(测试版): 用于处理图片类任务（采用CCR内置的agent支持），如果该模型不支持工具调用，需要将`config.forceUseImageAgent`属性设置为`true`。
 
-- You can also switch models dynamically in Claude Code with the `/model` command:
+您还可以使用 `/model` 命令在 Claude Code 中动态切换模型：
 `/model provider_name,model_name`
-Example: `/model openrouter,anthropic/claude-3.5-sonnet`
+示例: `/model openrouter,anthropic/claude-3.5-sonnet`
 
-#### Custom Router
+#### 自定义路由器
 
-For more advanced routing logic, you can specify a custom router script via the `CUSTOM_ROUTER_PATH` in your `config.json`. This allows you to implement complex routing rules beyond the default scenarios.
+对于更高级的路由逻辑，您可以在 `config.json` 中通过 `CUSTOM_ROUTER_PATH` 字段指定一个自定义路由器脚本。这允许您实现超出默认场景的复杂路由规则。
 
-In your `config.json`:
+在您的 `config.json` 中配置:
 
 ```json
 {
@@ -400,54 +349,54 @@ In your `config.json`:
 }
 ```
 
-The custom router file must be a JavaScript module that exports an `async` function. This function receives the request object and the config object as arguments and should return the provider and model name as a string (e.g., `"provider_name,model_name"`), or `null` to fall back to the default router.
+自定义路由器文件必须是一个导出 `async` 函数的 JavaScript 模块。该函数接收请求对象和配置对象作为参数，并应返回提供商和模型名称的字符串（例如 `"provider_name,model_name"`），如果返回 `null` 则回退到默认路由。
 
-Here is an example of a `custom-router.js` based on `custom-router.example.js`:
+这是一个基于 `custom-router.example.js` 的 `custom-router.js` 示例：
 
 ```javascript
 // /User/xxx/.claude-code-router/custom-router.js
 
 /**
- * A custom router function to determine which model to use based on the request.
+ * 一个自定义路由函数，用于根据请求确定使用哪个模型。
  *
- * @param {object} req - The request object from Claude Code, containing the request body.
- * @param {object} config - The application's config object.
- * @returns {Promise<string|null>} - A promise that resolves to the "provider,model_name" string, or null to use the default router.
+ * @param {object} req - 来自 Claude Code 的请求对象，包含请求体。
+ * @param {object} config - 应用程序的配置对象。
+ * @returns {Promise<string|null>} - 一个解析为 "provider,model_name" 字符串的 Promise，如果返回 null，则使用默认路由。
  */
 module.exports = async function router(req, config) {
-  const userMessage = req.body.messages.find((m) => m.role === "user")?.content;
+  const userMessage = req.body.messages.find(m => m.role === 'user')?.content;
 
-  if (userMessage && userMessage.includes("explain this code")) {
-    // Use a powerful model for code explanation
-    return "openrouter,anthropic/claude-3.5-sonnet";
+  if (userMessage && userMessage.includes('解释这段代码')) {
+    // 为代码解释任务使用更强大的模型
+    return 'openrouter,anthropic/claude-3.5-sonnet';
   }
 
-  // Fallback to the default router configuration
+  // 回退到默认的路由配置
   return null;
 };
 ```
 
-##### Subagent Routing
+##### 子代理路由
 
-For routing within subagents, you must specify a particular provider and model by including `<CCR-SUBAGENT-MODEL>provider,model</CCR-SUBAGENT-MODEL>` at the **beginning** of the subagent's prompt. This allows you to direct specific subagent tasks to designated models.
+对于子代理内的路由，您必须在子代理提示词的**开头**包含 `<CCR-SUBAGENT-MODEL>provider,model</CCR-SUBAGENT-MODEL>` 来指定特定的提供商和模型。这样可以将特定的子代理任务定向到指定的模型。
 
-**Example:**
+**示例：**
 
 ```
 <CCR-SUBAGENT-MODEL>openrouter,anthropic/claude-3.5-sonnet</CCR-SUBAGENT-MODEL>
-Please help me analyze this code snippet for potential optimizations...
+请帮我分析这段代码是否存在潜在的优化空间...
 ```
 
 ## Status Line (Beta)
-To better monitor the status of claude-code-router at runtime, version v1.0.40 includes a built-in statusline tool, which you can enable in the UI.
+为了在运行时更好的查看claude-code-router的状态，claude-code-router在v1.0.40内置了一个statusline工具，你可以在UI中启用它，
 ![statusline-config.png](/blog/images/statusline-config.png)
 
-The effect is as follows:
+效果如下：
 ![statusline](/blog/images/statusline.png)
 
 ## 🤖 GitHub Actions
 
-Integrate Claude Code Router into your CI/CD pipeline. After setting up [Claude Code Actions](https://docs.anthropic.com/en/docs/claude-code/github-actions), modify your `.github/workflows/claude.yaml` to use the router:
+将 Claude Code Router 集成到您的 CI/CD 管道中。在设置 [Claude Code Actions](https://docs.anthropic.com/en/docs/claude-code/github-actions) 后，修改您的 `.github/workflows/claude.yaml` 以使用路由器：
 
 ```yaml
 name: Claude Code
@@ -503,18 +452,16 @@ jobs:
           anthropic_api_key: "any-string-is-ok"
 ```
 
-> **Note**: When running in GitHub Actions or other automation environments, make sure to set `"NON_INTERACTIVE_MODE": true` in your configuration to prevent the process from hanging due to stdin handling issues.
+这种设置可以实现有趣的自动化，例如在非高峰时段运行任务以降低 API 成本。
 
-This setup allows for interesting automations, like running tasks during off-peak hours to reduce API costs.
+## 📝 深入阅读
 
-## 📝 Further Reading
+-   [项目动机和工作原理](blog/zh/项目初衷及原理.md)
+-   [也许我们可以用路由器做更多事情](blog/zh/或许我们能在Router中做更多事情.md)
 
-- [Project Motivation and How It Works](blog/en/project-motivation-and-how-it-works.md)
-- [Maybe We Can Do More with the Router](blog/en/maybe-we-can-do-more-with-the-route.md)
+## ❤️ 支持与赞助
 
-## ❤️ Support & Sponsoring
-
-If you find this project helpful, please consider sponsoring its development. Your support is greatly appreciated!
+如果您觉得这个项目有帮助，请考虑赞助它的开发。非常感谢您的支持！
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/F1F31GN2GM)
 
@@ -527,10 +474,9 @@ If you find this project helpful, please consider sponsoring its development. Yo
   </tr>
 </table>
 
-### Our Sponsors
+### 我们的赞助商
 
-A huge thank you to all our sponsors for their generous support!
-
+非常感谢所有赞助商的慷慨支持！
 
 - [AIHubmix](https://aihubmix.com/)
 - [BurnCloud](https://ai.burncloud.com)
@@ -539,39 +485,39 @@ A huge thank you to all our sponsors for their generous support!
 - @Simon Leischnig
 - [@duanshuaimin](https://github.com/duanshuaimin)
 - [@vrgitadmin](https://github.com/vrgitadmin)
-- @\*o
+- @*o
 - [@ceilwoo](https://github.com/ceilwoo)
-- @\*说
-- @\*更
-- @K\*g
-- @R\*R
+- @*说
+- @*更
+- @K*g
+- @R*R
 - [@bobleer](https://github.com/bobleer)
-- @\*苗
-- @\*划
+- @*苗
+- @*划
 - [@Clarence-pan](https://github.com/Clarence-pan)
 - [@carter003](https://github.com/carter003)
-- @S\*r
-- @\*晖
-- @\*敏
-- @Z\*z
-- @\*然
+- @S*r
+- @*晖
+- @*敏
+- @Z*z
+- @*然
 - [@cluic](https://github.com/cluic)
-- @\*苗
+- @*苗
 - [@PromptExpert](https://github.com/PromptExpert)
-- @\*应
+- @*应
 - [@yusnake](https://github.com/yusnake)
-- @\*飞
-- @董\*
-- @\*汀
-- @\*涯
-- @\*:-）
-- @\*\*磊
-- @\*琢
-- @\*成
-- @Z\*o
+- @*飞
+- @董*
+- @*汀
+- @*涯
+- @*:-）
+- @**磊
+- @*琢
+- @*成
+- @Z*o
 - @\*琨
 - [@congzhangzh](https://github.com/congzhangzh)
-- @\*\_
+- @*_
 - @Z\*m
 - @*鑫
 - @c\*y
@@ -580,7 +526,7 @@ A huge thank you to all our sponsors for their generous support!
 - @b\*g
 - @\*亿
 - @\*辉
-- @JACK
+- @JACK 
 - @\*光
 - @W\*l
 - [@kesku](https://github.com/kesku)
@@ -626,4 +572,9 @@ A huge thank you to all our sponsors for their generous support!
 - @\*呢
 - @\d*u
 
-(If your name is masked, please contact me via my homepage email to update it with your GitHub username.)
+
+（如果您的名字被屏蔽，请通过我的主页电子邮件与我联系，以便使用您的 GitHub 用户名进行更新。）
+
+
+## 交流群
+<img src="/blog/images/wechat_group.jpg" width="200" alt="wechat_group" />
